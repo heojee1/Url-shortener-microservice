@@ -1,7 +1,7 @@
 How to run the services.
 1. Download dependenceis
 ```console
-pip install requirements.txt
+pip install -r requirements.txt
 ```
 2. Initialize database
 ```console
