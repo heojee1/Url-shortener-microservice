@@ -1,0 +1,6 @@
+flask
+PyJWT
+python-dotenv
+psycopg2-binary
+sqlalchemy
+requests

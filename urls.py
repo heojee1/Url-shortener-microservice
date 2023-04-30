@@ -4,11 +4,13 @@ import requests
 import re, json, random
 from hashids import Hashids
 from time import time
+from dotenv import load_dotenv
 
+load_dotenv()
 
-SALT = "Very $$**^91@ sEcret SaaaLltT"  # Salt used to create hashes
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'Ktr9xIBj1ZP-S8GM3mYKdSToiT2tZPOevIh2wX_YVd8'
+
+SALT = os.environ.get("HASH_SALT")
 
 def select_by_id(id, username, cur):
     data = cur.execute("SELECT * FROM urls WHERE id=? AND username=?", (id, username)).fetchone()
@@ -308,6 +310,7 @@ def delete_all():
         return jsonify({"response": "Table is already empty."}), 200
     except:
         return jsonify({'message': 'Token is invalid'}), 403
+
 
 # Start flask app automatically when run with python
 if __name__ == '__main__':

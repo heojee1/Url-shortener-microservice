@@ -31,17 +31,6 @@ def insert_user(username, password):
     con.close()
 
 
-# Selects a row by matching the link
-def select_by_link(link, cur):
-    data = cur.execute("SELECT * FROM urls WHERE link=?", (link, )).fetchone()
-    return data
-
-
-# Selects a row by matching the id
-def select_by_id(id, cur):
-    data = cur.execute("SELECT * FROM urls WHERE id=?", (id, )).fetchone()
-    return data
-
 # Selects a row by matching the username
 def select_by_username(username, cur):
     print(f"Selecting user with username: {username}")
@@ -71,20 +60,6 @@ def update_password(username, new_password, cur):
     cur.connection.commit()
     print("Password updated successfully!")
     cur.close()
-
-
-# Regex from Django open source code (https://github.com/django/django/blob/stable/1.3.x/django/core/validators.py/#L45)
-def is_valid_url(url):
-    regex = re.compile(
-        r'^(?:http)s?://'  # scheme
-        # domain...
-        r'(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+(?:[A-Z]{2,6}\.?|[A-Z0-9-]{2,}\.?)|'
-        r'localhost|'  # localhost...
-        r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})'  # ...or IP
-        r'(?::\d+)?'  # optional port
-        r'(?:/?|[/?]\S+)$', re.IGNORECASE)
-
-    return bool(regex.match(url))
 
 
 def validate_token():
