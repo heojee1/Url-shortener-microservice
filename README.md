@@ -1,8 +1,11 @@
-How to run the services.
-1. Run docker compose
+1. How to run the services.
 ```console
 docker compose up --build
 ```
+
+2. Structure
+Folders **jwt**, **url**, and **user** each contain Dockerfile, .env, requirements.txt, app.py, and utils.py.
+
 
 After user login, JWT token is returned. Place this token in the request header with key "x-access-tokens" to update password or use URL shortener service.
 
