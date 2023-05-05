@@ -1,6 +1,7 @@
+import os
+
 from sqlalchemy import create_engine, exc, text
 from werkzeug.security import generate_password_hash, check_password_hash
-import os
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -21,7 +22,6 @@ SUCCESS = True
 ###
 # Public functions
 ###
-
 def select_user_by_(**kwargs):
     filter_str = ' AND '.join(f"{k}='{v}'" for k, v in kwargs.items())
     
@@ -76,7 +76,6 @@ def create_user(username, password):
 
     try:
         result, _ = select_user_by_(username=username)
-        print(result)
         assert not result
     except:
         return result, FAIL
@@ -99,7 +98,7 @@ def create_user(username, password):
         if engine: engine.dispose()
 
 
-def update_password(user_id, old_password, new_password):
+def update_password(username, old_password, new_password):
     '''
         Function used to update username from the DB.
         :param username: username
@@ -112,10 +111,10 @@ def update_password(user_id, old_password, new_password):
     engine = None
 
     try:
-        user, _ = select_user_by_(id=user_id)
+        user, _ = select_user_by_(username=username)
         assert check_password_hash(user['password'], old_password)
     except:
-        return "Forbidden, invalid username or password", FAIL
+        return None, FAIL
 
     try:
         engine = create_engine(URI, echo=True)
@@ -127,7 +126,8 @@ def update_password(user_id, old_password, new_password):
             SET
                 password='{generate_password_hash(new_password)}'
             WHERE
-                id={user_id}'''))
+                username='{username}'
+            '''))
         db_connection.commit()
         return user, SUCCESS
     except exc.SQLAlchemyError as error:

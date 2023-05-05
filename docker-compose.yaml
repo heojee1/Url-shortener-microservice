@@ -1,17 +1,6 @@
 version: "3.8"
 
 services:
-  jwt:
-    container_name: jwt
-    build:
-      context: ./jwt
-    env_file:
-      - ./jwt/.env
-    ports:
-      - 5002:5002
-    volumes:
-      - ./jwt:/jwt
-
   url:
     container_name: url
     build:

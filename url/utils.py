@@ -21,25 +21,16 @@ SUCCESS = True
 
 hashids = Hashids(min_length=8, salt=SALT)
 
-###
-# Public functions
-###
-def is_valid_url(url):
-    regex = re.compile(
-        r'^(?:http)s?://'  # scheme
-        # domain...
-        r'(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+(?:[A-Z]{2,6}\.?|[A-Z0-9-]{2,}\.?)|'
-        r'localhost|'  # localhost...
-        r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})'  # ...or IP
-        r'(?::\d+)?'  # optional port
-        r'(?:/?|[/?]\S+)$', re.IGNORECASE)
-
-    return bool(regex.match(url))
-
+next_id = 0
 
 def generate_short_url():
-    number = int(round(time() * 1000)) + random.randint(0, 1e8)
+    global next_id
+
+    number = int(round(time() * 1000)) + random.randint(0, 1e6) + next_id
+    next_id += 1
+
     return hashids.encode(number)
+
 
 def select_url_by_(**kwargs):
     filter_str = ' AND '.join(f"{k}='{v}'" for k, v in kwargs.items())
@@ -63,8 +54,8 @@ def select_url_by_(**kwargs):
         if engine: engine.dispose()
 
 
-def retrieve_all(user_id):    
-    QUERY = text(f"""SELECT * FROM urls WHERE user_id={user_id}""")
+def retrieve_all(username):    
+    QUERY = text(f"""SELECT * FROM urls WHERE username='{username}'""")
 
     db_connection = None
     engine = None
@@ -81,7 +72,7 @@ def retrieve_all(user_id):
         if engine: engine.dispose()
 
 
-def create_url(url, user_id):
+def create_url(url, username):
     '''
         Function used to insert a user into the DB.
         :param username: username
@@ -90,7 +81,7 @@ def create_url(url, user_id):
     '''
 
     try:
-        result, _ = select_url_by_(original=url, user_id=user_id)
+        result, _ = select_url_by_(original=url, username=username)
         print(result)
         assert not result
     except:
@@ -103,13 +94,12 @@ def create_url(url, user_id):
         db_connection = engine.connect()
 
         short = generate_short_url()
-        url_info = db_connection.execute(text(f"""
-                INSERT INTO urls (original, short, user_id)
-                    VALUES ('{url}', '{short}', '{user_id}')
-                RETURNING *
-                """)).fetchone()
+        db_connection.execute(text(f"""
+                INSERT INTO urls (original, short, username)
+                    VALUES ('{url}', '{short}', '{username}')
+                """))
         db_connection.commit()
-        return url_info._asdict(), SUCCESS
+        return "Done", SUCCESS
     except exc.SQLAlchemyError as error:
         return f'Error while executing DB query: {error}', FAIL
     finally:
@@ -117,7 +107,7 @@ def create_url(url, user_id):
         if engine: engine.dispose()
 
 
-def update_link(id, new_url, user_id):
+def update_link(id, new_url, username):
     '''
         Function used to update username from the DB.
         :param username: username
@@ -133,17 +123,16 @@ def update_link(id, new_url, user_id):
         engine = create_engine(URI, echo=True)
         db_connection = engine.connect()
 
-        url_info = db_connection.execute(text(f'''
+        counts = db_connection.execute(text(f'''
             UPDATE
                 urls
             SET
                 original='{new_url}'
             WHERE
-                id={id} AND user_id={user_id}
-            RETURNING *
-            ''')).fetchone()
+                id={id} AND username='{username}'
+            '''))
         db_connection.commit()
-        return url_info._asdict(), SUCCESS
+        return counts.rowcount, SUCCESS
     except exc.SQLAlchemyError as error:
         return f'Error while executing DB query: {error}', FAIL
     finally:
@@ -151,7 +140,7 @@ def update_link(id, new_url, user_id):
         if engine: engine.dispose()
 
 
-def remove_url(id, user_id):
+def remove_url(id, username):
     '''
         Function used to delete a url from the DB.
         :param id: url ID
@@ -163,16 +152,65 @@ def remove_url(id, user_id):
     try:
         engine = create_engine(URI, echo=True)
         db_connection = engine.connect()
-        url_info = db_connection.execute(text(f'''
+        counts = db_connection.execute(text(f'''
             DELETE FROM
                 urls
             WHERE
-                id={id} AND user_id={user_id}
-            RETURNING *''')).fetchone()
+                id={id} AND username='{username}'
+            '''))
         db_connection.commit()
-        return url_info._asdict(), SUCCESS
+        return counts.rowcount, SUCCESS
     except exc.SQLAlchemyError as error:
-        return f'Error while executing DB query: {error}'
+        return f'Error while executing DB query: {error}', FAIL
+    finally:
+        if db_connection: db_connection.close()
+        if engine: engine.dispose()
+
+
+def remove_all_url(username):
+    '''
+        Function used to delete all urls of the user from the DB.
+        :param username: username
+        :return: error or success strings for updating DB.
+    '''
+
+    db_connection = None
+    engine = None
+    try:
+        engine = create_engine(URI, echo=True)
+        db_connection = engine.connect()
+        counts = db_connection.execute(text(f'''
+            DELETE FROM
+                urls
+            WHERE
+                username='{username}'
+            '''))
+        db_connection.commit()
+        return counts.rowcount, SUCCESS
+    except exc.SQLAlchemyError as error:
+        return f'Error while executing DB query: {error}', FAIL
+    finally:
+        if db_connection: db_connection.close()
+        if engine: engine.dispose()
+
+
+def select_user_by_(**kwargs):
+    filter_str = ' AND '.join(f"{k}='{v}'" for k, v in kwargs.items())
+    
+    QUERY = text(f"""SELECT * FROM users WHERE {filter_str}""")
+
+    db_connection = None
+    engine = None
+    try:
+        engine = create_engine(URI, echo=True)
+        db_connection = engine.connect()
+        result = db_connection.execute(QUERY).fetchone()
+        db_connection.commit()
+        if result:
+            return result._asdict(), SUCCESS
+        return result, SUCCESS
+    except exc.SQLAlchemyError as error:
+        return f'Error while executing DB query: {error}', FAIL
     finally:
         if db_connection: db_connection.close()
         if engine: engine.dispose()
