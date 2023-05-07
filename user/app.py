@@ -149,9 +149,6 @@ def validate_jwt(token: str) -> typing.Optional[str]:
 app = Flask(__name__)
 
 
-
-
-
 ### API FUNCTIONS ###
 # We use a flask macro to make let this function be called for the users URL ("/users") and the specified HTTP methods.
 @app.route("/users", methods=['GET', 'POST', 'PUT'])

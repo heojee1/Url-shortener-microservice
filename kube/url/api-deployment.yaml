@@ -28,6 +28,7 @@ spec:
       containers:
       - name: url-api-container
         image: jwnheo/url-api:latest
+        imagePullPolicy: "Always"
         ports:
         - containerPort: 5001
         envFrom:
