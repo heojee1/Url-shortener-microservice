@@ -154,7 +154,7 @@ app = Flask(__name__)
 
 ### API FUNCTIONS ###
 # We use a flask macro to make let this function be called for the users URL ("/users") and the specified HTTP methods.
-@app.route("/users", methods=['POST', 'PUT'])
+@app.route("/users", methods=['GET', 'POST', 'PUT'])
 def users():
     """
         Handles managing users.
@@ -167,6 +167,8 @@ def users():
                    correct. Returns 204 on success, 404 if the user does not
                    exist or 403 if the password was wrong.
     """
+    if request.method == "GET":
+        return "Hello, user", 200
 
     # Switch on the method used
     if request.method == "POST":

@@ -121,6 +121,10 @@ def check_login(token: str) -> typing.Optional[str]:
 # Setup the application as a Flask app
 app = Flask(__name__)
 
+@app.route("/index", methods=['GET'])
+def index():
+    return "Hello, url", 200
+
 
 ### API FUNCTIONS ###
 # We use a flask macro to make let this function be called for the root URL ("/") and the specified HTTP methods.
