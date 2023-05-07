@@ -33,7 +33,7 @@ spec:
         # command: ["sh", "-c", "sleep 10; pipenv run python manage.py migrate && pipenv run python manage.py runserver 0.0.0.0:8000"]
         envFrom:
           - configMapRef:
-              name: api-config
+              name: url-config
         env:
           - name: POSTGRES_PASSWORD
             valueFrom:
