@@ -27,7 +27,7 @@ spec:
                 - kubeclass-188
       containers:
       - name: user-api-container
-        image: jwnheo/user-api:v1
+        image: jwnheo/user-api:latest
         ports:
         - containerPort: 5000
         envFrom:
