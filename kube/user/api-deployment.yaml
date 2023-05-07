@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-api-deployment
+  namespace: shortener-app
+  labels:
+    app: user-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: user-api
+  template:
+    metadata:
+      labels:
+        app: user-api
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: kubernetes.io/hostname
+                operator: In
+                values:
+                - kubeclass-187
+                - kubeclass-188
+      containers:
+      - name: user-api-container
+        image: jwnheo/user-api:v1
+        ports:
+        - containerPort: 5000
+        # command: ["sh", "-c", "sleep 10; pipenv run python manage.py migrate && pipenv run python manage.py runserver 0.0.0.0:8000"]
+        envFrom:
+          - configMapRef:
+              name: user-config
+        env:
+          - name: POSTGRES_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: postgres-secret
+                key: POSTGRES_PASSWORD
