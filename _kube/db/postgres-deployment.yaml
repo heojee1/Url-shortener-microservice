@@ -13,6 +13,16 @@ spec:
       labels:
         app: postgres
     spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: kubernetes.io/hostname
+                operator: In
+                values:
+                - kubeclass-187
+                - kubeclass-188
       containers:
         - name: postgres-container
           image: postgres:14.1-alpine
@@ -35,5 +45,3 @@ spec:
         - name: db
           persistentVolumeClaim:
             claimName: postgres-pv-claim
-      nodeselector:
-        vm: 187
