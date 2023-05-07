@@ -6,8 +6,6 @@ metadata:
   labels:
     app: postgres
 data:
-  POSTGRES_DB: db
-  POSTGRES_USER: postgresadmin
   init.sql: |
     CREATE TABLE users (
         id SERIAL PRIMARY KEY,

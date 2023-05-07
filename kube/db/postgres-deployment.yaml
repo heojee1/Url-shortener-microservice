@@ -29,10 +29,11 @@ spec:
           imagePullPolicy: "IfNotPresent"
           ports:
             - containerPort: 5432
-          envFrom:
-            - configMapRef:
-                name: postgres-config
           env:
+            - name: POSTGRES_DB
+              value: db
+            - name: POSTGRES_USER
+              value: postgresadmin
             - name: POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:
@@ -41,7 +42,7 @@ spec:
           volumeMounts:
             - mountPath: /var/lib/postgresql/data
               name: db
-            - mountPath: /docker-entrypoint-initdb.d
+            - mountPath: /docker-entrypoint-initdb.d/
               name: postgresql-initdb
       volumes:
         - name: db
@@ -49,4 +50,4 @@ spec:
             claimName: postgres-pv-claim
         - name: postgresql-initdb
           configMap:
-            name: postgresql-initdb-config
+            name: postgres-config
