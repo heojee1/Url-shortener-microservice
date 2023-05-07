@@ -58,7 +58,6 @@ URL_CORRECTNESS_REGEX = (
 )
 
 # Read ENV vars
-SECRET = os.environ.get('JWT_SECRET')
 JWT_HOST = os.environ.get('JWT_HOST')
 JWT_PORT = os.environ.get('JWT_PORT')
 
