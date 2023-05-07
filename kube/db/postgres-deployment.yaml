@@ -26,6 +26,10 @@ spec:
       containers:
         - name: postgres-container
           image: postgres:14.1-alpine
+          lifecycle:
+            postStart:
+              exec:
+                command: ["/bin/bash","-c","sleep 20 && PGPASSWORD=$POSTGRES_PASSWORD psql $POSTGRES_DB -U $POSTGRES_USER -c \'CREATE TABLE IF NOT EXISTS users ( id SERIAL PRIMARY KEY, username VARCHAR (50) UNIQUE NOT NULL, password VARCHAR NOT NULL); CREATE TABLE IF NOT EXISTS urls ( id SERIAL PRIMARY KEY, original VARCHAR NOT NULL, short VARCHAR (50) UNIQUE NOT NULL, username VARCHAR (50) NOT NULL, FOREIGN KEY (username) REFERENCES users(username));\'"] 
           imagePullPolicy: "IfNotPresent"
           ports:
             - containerPort: 5432
@@ -39,9 +43,9 @@ spec:
                   name: postgres-secret
                   key: POSTGRES_PASSWORD
           volumeMounts:
-            - mountPath: /docker-entrypoint-initdb.d
-              name: initdb
+            - mountPath: /var/lib/postgresql/data
+              name: db
       volumes:
-        - name: initdb
+        - name: db
           persistentVolumeClaim:
-            claimName: mysql-initdb-pv-claim
+            claimName: postgres-pv-claim
