@@ -35,3 +35,5 @@ spec:
         - name: db
           persistentVolumeClaim:
             claimName: postgres-pv-claim
+      nodeselector:
+        vm: 187
