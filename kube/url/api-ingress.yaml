@@ -10,7 +10,7 @@ metadata:
     nginx.ingress.kubernetes.io/cors-allow-credentials: "true"
 spec:
   rules:
-    - host: api.shortener-app.com
+    - host: shortener-app.com
       http:
         paths:
           - path: /
