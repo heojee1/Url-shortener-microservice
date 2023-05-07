@@ -39,9 +39,14 @@ spec:
                   name: postgres-secret
                   key: POSTGRES_PASSWORD
           volumeMounts:
+            - mountPath: /docker-entrypoint-initdb.d
+              name: initdb
             - mountPath: /var/lib/postgresql/data
               name: db
       volumes:
+        - name: initdb
+          configMap:
+            name: postgres-initdb-config
         - name: db
           persistentVolumeClaim:
             claimName: postgres-pv-claim
