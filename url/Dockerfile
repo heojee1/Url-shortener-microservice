@@ -9,4 +9,4 @@ RUN apt-get update && apt-get install -y curl
 RUN pip install -r requirements.txt
 EXPOSE 5001
 COPY . .
-CMD ["python3", "-m", "flask", "run", "--host=0.0.0.0", "--port=5001"]
+CMD ["flask", "run", "--host=0.0.0.0", "--port=5001"]
