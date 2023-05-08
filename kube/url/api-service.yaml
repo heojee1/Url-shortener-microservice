@@ -4,10 +4,9 @@ metadata:
   name: url-api-service
   namespace: shortener-app
 spec:
-  type: ClusterIP
+  type: NodePort
   ports:
-   - protocol: TCP
-     port: 5001
-     targetPort: 5001
+   - port: 5001
+     nodePort: 30002
   selector:
     app: url-api

@@ -164,12 +164,12 @@ def root():
 
     elif request.method == "POST":
         # Get the authorization token
-        if "Authorization" not in request.headers: return "Forbidden", 403
+        if "Authorization" not in request.headers: return "Forbidden - POST no token", 403
         token = request.headers["Authorization"]
 
         # Check if the token is valid
         username = check_login(token)
-        if username is None: return "Forbidden", 403
+        if username is None: return "Forbidden - POST none username", 403
 
         # Try to get the URL
         if "url" not in request.form:
