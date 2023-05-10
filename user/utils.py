@@ -42,29 +42,7 @@ def select_user_by_(**kwargs):
     finally:
         if db_connection: db_connection.close()
         if engine: engine.dispose()
-
-def select_by_username(username):
-    '''
-        Function used to fetch a user from PSQL DB.
-        :return: user
-    '''
-
-    GET_USER_QUERY = text(f"""SELECT * FROM users WHERE username='{username}'""")
-    
-    db_connection = None
-    engine = None
-    try:
-        engine = create_engine(URI, echo=True)
-        db_connection = engine.connect()
-        user = db_connection.execute(GET_USER_QUERY).fetchone()
-        db_connection.commit()
-        return user._asdict(), SUCCESS
-    except exc.SQLAlchemyError as error:
-        return f'Error while executing DB query: {error}', FAIL
-    finally:
-        if db_connection: db_connection.close()
-        if engine: engine.dispose()
-    
+        
 
 def create_user(username, password):
     '''

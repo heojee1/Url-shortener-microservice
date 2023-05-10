@@ -7,8 +7,8 @@ services:
       context: ./url
     env_file:
       - ./url/.env
-    ports:
-      - 5001:5001
+    expose:
+      - 5001
     volumes:
       - ./url:/url
     depends_on:
@@ -21,8 +21,8 @@ services:
       context: ./user
     env_file:
       - ./user/.env
-    ports:
-      - 5000:5000
+    expose:
+      - 5000
     volumes:
       - ./user:/user
       - type: bind
@@ -41,6 +41,15 @@ services:
     volumes:
       - ./db:/docker-entrypoint-initdb.d/
       - postgres_data:/var/lib/postgresql/data
+
+  nginx:
+    container_name: nginx
+    build:
+      context: ./nginx
+    ports:
+      - 80:80
+    depends_on:
+      - user
 
 volumes:
   postgres_data:
