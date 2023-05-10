@@ -7,6 +7,6 @@ spec:
   type: NodePort
   ports:
    - port: 5000
-     nodePort: 30002
+     nodePort: 30003
   selector:
     app: user-api
