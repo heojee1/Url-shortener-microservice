@@ -38,6 +38,12 @@ You can now access both user management and URL shortener service via localhost.
 Access user management service with prefix ```localhost/users``` and URL shortener service with prefix ```localhost/```.
 For instance send a POST request to ```localhost/users/login``` for login and a POST request to ```localhost/``` to create a new short URL.
 
+## Removing the services
+Bring down the docker containers.
+```bash
+docker compose down
+```
+
 # Assignment 3.2 - Kubernetes
 
 ## File Structure
@@ -102,3 +108,10 @@ For instance:
 * access user management service through ```http://145.100.135.189:30003/users```
 * access URL shortener service through ```http://145.100.135.189:30002/url```
 
+## Removing the service
+```bash
+# Delete the kubernetes files for each services
+kubectl delete -f db
+kubectl delete -f user
+kubectl delete -f url
+```
