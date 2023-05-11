@@ -32,7 +32,7 @@ Under this folder, there are folders **user**, **url**, and **db**, each contain
 Apply the files as follows:
 ```bash
 # Navigate to the folder with kubernetes files
-cd web/kube
+cd web3/kube
 
 # Apply the kubernetes files for each services
 kubectl apply -f db
