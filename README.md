@@ -2,6 +2,30 @@
 
 # Assignment 3.1 - Docker
 
+## File Structure
+```
+.
+├── docker
+│   ├── db
+│       └── init.sql
+│   ├── user
+│       ├── .env
+│       ├── app.py
+│       ├── utils.py
+│       ├── Dockerfile
+│       └── requirements.txt
+│   ├── url
+│       ├── .env
+│       ├── app.py
+│       ├── utils.py
+│       ├── **Dockerfile**
+│       └── requirements.txt
+│   ├── nginx
+│       ├── Dockerfile
+│       └── nginx.conf
+└── kube
+```
+
 ## Starting the services
 ```bash
 # Setup the virtual environment locally
@@ -15,6 +39,28 @@ Access user management service with prefix ```localhost/users``` and URL shorten
 For instance send a POST request to ```localhost/users/login``` for login and a POST request to ```localhost/``` to create a new short URL.
 
 # Assignment 3.2 - Kubernetes
+
+## File Structure
+```
+.
+├── kube
+│   ├── db
+│       ├── postgres-config.yaml
+│       ├── postgres-secret.yaml
+│       ├── postgres-storage.yaml
+│       ├── postgres-service.yaml
+│       ├── postgres-network.yaml
+│       └── postgres-deployment.txt
+│   ├── user
+│       ├── api-config.yaml
+│       ├── api-service.yaml
+│       └── api-deployment.txt
+│   ├── url
+│       ├── api-config.yaml
+│       ├── api-service.yaml
+│       └── api-deployment.txt
+└── docker
+```
 
 ## Accessing VM
 We are using virtual machines 187, 188, and 189 provided.
