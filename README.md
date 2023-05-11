@@ -78,13 +78,13 @@ ssh student189@145.100.135.189
 Put in ```changeme``` as the password when prompted.
 
 ## Starting the service
-The kubernetes files are under folder web/kube
+The kubernetes files are under folder 18_web_service_3/kube
 Under this folder, there are folders **user**, **url**, and **db**, each containing relevant kubernetes files for user manangment, URL shortener, and database.
 
 Apply the files as follows:
 ```bash
 # Navigate to the folder with kubernetes files
-cd web3/kube
+cd 18_web_service_3/kube
 
 # Apply the kubernetes files for each services
 kubectl apply -f db
