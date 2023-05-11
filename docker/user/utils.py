@@ -19,6 +19,10 @@ URI = f'postgresql+psycopg2://{DB_USER}:{DB_PASS.strip()}@{DB_HOST}:{DB_PORT}/{D
 FAIL = False
 SUCCESS = True
 
+# We got the basic structure of the function and SQL queries from this tutorial online 
+# https://www.digitalocean.com/community/tutorials/how-to-use-a-postgresql-database-in-a-flask-application#step-5-adding-new-books
+
+
 # Select a user by the given keyword arguments
 def select_user_by_(**kwargs):
     filter_str = ' AND '.join(f"{k}='{v}'" for k, v in kwargs.items())

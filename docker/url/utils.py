@@ -32,6 +32,10 @@ def generate_short_url():
 
     return hashids.encode(number)
 
+
+# We got the basic structure of the function and SQL queries from this tutorial online 
+# https://www.digitalocean.com/community/tutorials/how-to-use-a-postgresql-database-in-a-flask-application#step-5-adding-new-books
+
 # Select a url by given keyword arguments 
 def select_url_by_(**kwargs):
     filter_str = ' AND '.join(f"{k}='{v}'" for k, v in kwargs.items())
