@@ -1,4 +1,4 @@
-**NOTE** | The code for user management and URL shortener services (**/docker/user and **/docker/url**) is based on the barebone project provided by the instructors of the course Web Services and Cloud-Based Systems.
+**NOTE** | The code for user management and URL shortener services (**/docker/user** and **/docker/url**) is based on the barebone project provided by the instructors of the course Web Services and Cloud-Based Systems.
 
 # Assignment 3.1 - Docker
 
@@ -38,6 +38,13 @@ cd web3/kube
 kubectl apply -f db
 kubectl apply -f user
 kubectl apply -f url
+```
+
+It will create 1 pod for PostgreSQL, 1 pod for user management, and 3 pods for URL shortener.
+Please wait until all the pods are up and running.
+You may monitor the status using the command:
+```bash
+kubectl get pods -n shortener-app
 ```
 
 ## Using the services
