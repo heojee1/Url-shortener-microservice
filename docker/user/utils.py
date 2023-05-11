@@ -19,9 +19,7 @@ URI = f'postgresql+psycopg2://{DB_USER}:{DB_PASS.strip()}@{DB_HOST}:{DB_PORT}/{D
 FAIL = False
 SUCCESS = True
 
-###
-# Public functions
-###
+# Select a user by the given keyword arguments
 def select_user_by_(**kwargs):
     filter_str = ' AND '.join(f"{k}='{v}'" for k, v in kwargs.items())
     
@@ -43,7 +41,7 @@ def select_user_by_(**kwargs):
         if db_connection: db_connection.close()
         if engine: engine.dispose()
         
-
+# Create a user with given username and password
 def create_user(username, password):
     '''
         Function used to insert a user into the DB.
@@ -75,7 +73,7 @@ def create_user(username, password):
         if db_connection: db_connection.close()
         if engine: engine.dispose()
 
-
+# Update user's password with new password
 def update_password(username, old_password, new_password):
     '''
         Function used to update username from the DB.

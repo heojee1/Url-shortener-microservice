@@ -14,6 +14,7 @@ DB_USER = os.environ.get('POSTGRES_USER')
 DB_PASS = os.environ.get('POSTGRES_PASSWORD')
 SALT = os.environ.get('HASH_SALT')
 
+# Create URI for Postgresql database
 URI = f'postgresql+psycopg2://{DB_USER}:{DB_PASS.strip()}@{DB_HOST}:{DB_PORT}/{DB_DB}'
 
 FAIL = False
@@ -31,7 +32,7 @@ def generate_short_url():
 
     return hashids.encode(number)
 
-
+# Select a url by given keyword arguments 
 def select_url_by_(**kwargs):
     filter_str = ' AND '.join(f"{k}='{v}'" for k, v in kwargs.items())
     
@@ -53,7 +54,7 @@ def select_url_by_(**kwargs):
         if db_connection: db_connection.close()
         if engine: engine.dispose()
 
-
+# Retrieve all urls under the given username
 def retrieve_all(username):    
     QUERY = text(f"""SELECT * FROM urls WHERE username='{username}'""")
 
@@ -107,6 +108,7 @@ def create_url(url, username):
         if engine: engine.dispose()
 
 
+# Update the url of the given id under the username
 def update_link(id, new_url, username):
     '''
         Function used to update username from the DB.
@@ -140,6 +142,7 @@ def update_link(id, new_url, username):
         if engine: engine.dispose()
 
 
+# Remoeve the url by id under the given username
 def remove_url(id, username):
     '''
         Function used to delete a url from the DB.
@@ -167,6 +170,7 @@ def remove_url(id, username):
         if engine: engine.dispose()
 
 
+# Remove all urls under the given username
 def remove_all_url(username):
     '''
         Function used to delete all urls of the user from the DB.
@@ -193,7 +197,7 @@ def remove_all_url(username):
         if db_connection: db_connection.close()
         if engine: engine.dispose()
 
-
+# Select a user by the given keyword arguments
 def select_user_by_(**kwargs):
     filter_str = ' AND '.join(f"{k}='{v}'" for k, v in kwargs.items())
     
